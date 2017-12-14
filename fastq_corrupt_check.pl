@@ -69,5 +69,7 @@ foreach my $file (@ARGV) {
 	}
 	if ($line_number != 0) {
 		say "There are an incorrect number of lines in $file, it should be a multiple of 4.";
+		die;
 	}
+	say "\n$file looks good!\n";
 }
