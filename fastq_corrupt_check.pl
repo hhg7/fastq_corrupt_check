@@ -23,24 +23,21 @@ local $SIG{__WARN__} = sub {
 foreach my $file (@ARGV) {
 	my $compression;
 
-	if ($file =~ m/(fq|fastq)\.?(bz2|gz)$/) {
+	if ($file =~ m/(fq|fastq)\.?(bz2|gz)?$/) {
 		$compression = $2;
 	} else {
 		say "$file failed regex.";
 		die;
 	}
 
-	my $cat;
-
-	if ($compression eq 'bz2') {
-		$cat = 'bzcat';
-	} elsif ($compression eq 'gz') {
-		$cat = 'zcat';
-	} else {
-		say "Got unrecognized compression: $compression";
-		die;
+	my $cat = 'cat';
+	if ($compression) {#if defined
+		if ($compression eq 'bz2') {
+			$cat = 'bzcat';
+		} elsif ($compression eq 'gz') {
+			$cat = 'zcat';
+		}
 	}
-
 	my $line_number = 0;
 	my $no_of_nucleotides;
 	foreach my $line (`$cat $file`) {
@@ -48,6 +45,10 @@ foreach my $file (@ARGV) {
 		chomp $line;
 		if ($line_number == 2) {#@ the 2nd entry
 			$no_of_nucleotides = length $line;
+		}
+		if (($line_number == 2) && ($line !~ m/^[ACGTN]+$/)) {
+			say "There are some contaminating characters in line2: $line";
+			die;
 		}
 		if (($line_number == 3) && ($line !~ m/^\+/)) {
 			say "$line should start with a '+'";
