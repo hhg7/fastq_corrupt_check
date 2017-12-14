@@ -3,6 +3,8 @@ Check a FASTQ file to see if it is corrupt
 
 # Usage: 
 
+fastq_corrupt_check can accept any number of fastq files, and will check all files mentioned after `perl fastq_corrupt_check.pl`
+
 `perl fastq_corrupt_check.pl file1 file2`
 
 where each file has `fastq` or `fq` at the end, with no compression, `gz` compression, or `bz2` compression.
@@ -19,5 +21,4 @@ that Fastq files are not corrupted.  Each entry in a Fastq file has 4 lines.  Th
     * The 3rd line must start with a '+'
     * The file should have an integral multiple of 4 number of lines.
     
-This program is not overly complicated.  But it is meant as a timesaver.  I am putting it here because FastQC doesn't do these
-checks, and these sorts of errors can be missed.
+This program is not complicated.  It is meant as a timesaver.  I am putting it here because FastQC didn't noticed that a file was corrupted in transfer.
